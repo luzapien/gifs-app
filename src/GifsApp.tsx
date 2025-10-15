@@ -1,0 +1,34 @@
+import { useState } from 'react'
+import GifList from './gifs/GifList'
+import PreviousSearches from './gifs/PreviousSearches'
+import { mockGifs, searches } from './mock-data/gifs.mock'
+import { CustomHeader } from './shared/components/CustomHeader'
+import SearchBar from './shared/components/SearchBar'
+
+export const GifsApp = () => {
+    const [previousTerms, setPreviousTerms] = useState(['goku'])
+
+    const handleTermClicked = (term: string) => {
+        console.log(term)
+        // setPreviousTerms([...previousTerms, term])
+    }
+
+    const handleSearch = (query: string) => {
+        console.log({ query })
+    }
+    return (
+        <>
+            <CustomHeader title='Buscador de Gifs' description='Descubre y comparte el gif perfecto' />
+
+            {/*Search*/}
+            <SearchBar placeholder='Buscar gifs' onQuery={handleSearch} />
+
+            {/* Busquedas previas */}
+
+            <PreviousSearches searches={previousTerms} onLabelClicked={handleTermClicked} />
+
+            {/* Gigs */}
+            <GifList gifs={mockGifs} />
+        </>
+    )
+}
