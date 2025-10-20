@@ -1,10 +1,5 @@
-export interface Gif {
-    id: string
-    title: string
-    url: string
-    width: number
-    height: number
-}
+import type { Gif } from "../gifs/interfaces/gif.interfce"
+
 
 export const searches = ['Goku', 'Demon Slayer', 'Totoro', 'Dan da dan']
 

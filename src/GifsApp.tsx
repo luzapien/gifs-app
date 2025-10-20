@@ -1,26 +1,34 @@
-import { useState } from 'react'
-import GifList from './gifs/GifList'
-import PreviousSearches from './gifs/PreviousSearches'
-import { mockGifs, searches } from './mock-data/gifs.mock'
+import { useEffect, useState } from 'react'
+import GifList from '../src/gifs/components/GifList'
+import PreviousSearches from './gifs/components/PreviousSearches'
 import { CustomHeader } from './shared/components/CustomHeader'
 import SearchBar from './shared/components/SearchBar'
+import { getGiftsByQuery } from './gifs/actions/get-gits-by-query-actions'
+import type { Gif } from './gifs/interfaces/gif.interfce'
 
 export const GifsApp = () => {
-    const [previousTerms, setPreviousTerms] = useState(['goku', 'nana'])
+    const [previousTerms, setPreviousTerms] = useState<string[]>([])
+    const [currentGifs, setCurrentGifs] = useState<Gif[]>([])
 
-    const handleTermClicked = (term: string) => {
+    const handleTermClicked = async (term: string) => {
         console.log(term)
+        const gifs = await getGiftsByQuery(term)
+        setCurrentGifs(gifs)
         // setPreviousTerms([...previousTerms, term])
     }
 
-    const handleSearch = (query: string) => {
+    const handleSearch = async (query: string) => {
         query = query.trim().toLocaleLowerCase()
         if (query.length === 0) return
         if (previousTerms.includes(query)) return
-        const currentTerms = previousTerms.slice(0, 6)
-        currentTerms.unshift(query)
-        setPreviousTerms(currentTerms)
+        const newTerms = previousTerms.slice(0, 7)
+        newTerms.unshift(query)
+        setPreviousTerms(newTerms)
+        const gifs = await getGiftsByQuery(query)
+        setCurrentGifs(gifs)
+        console.log(gifs)
     }
+    useEffect(() => {}, [])
     return (
         <>
             <CustomHeader title='Buscador de Gifs' description='Descubre y comparte el gif perfecto' />
@@ -32,7 +40,7 @@ export const GifsApp = () => {
             <PreviousSearches searches={previousTerms} onLabelClicked={handleTermClicked} />
 
             {/* Gifs */}
-            <GifList gifs={mockGifs} />
+            <GifList gifs={currentGifs} />
         </>
     )
 }
